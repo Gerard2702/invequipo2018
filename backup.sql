@@ -207,11 +207,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla inventario_informatico.users: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla inventario_informatico.users: ~1 rows (aproximadamente)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Gerardo Orellana', 'gerard.gt2009@gmail.com', '$2y$10$lPrWJ0ytU6OPUpiN0MdxEOE4BB3q1RPI8/VMQafoFSb2kom2zLcYe', 'wOIx1nkInBSWbG6aSPOS01PXrY9TOxUGrPjD3Q43hvypog9M0Nqq0SHoEfUp', '2018-06-14 17:35:57', '2018-06-14 17:35:57');
+	(1, 'Gerardo Orellana', 'gerard.gt2009@gmail.com', '$2y$10$lPrWJ0ytU6OPUpiN0MdxEOE4BB3q1RPI8/VMQafoFSb2kom2zLcYe', 'A4D9RrtAeZNPwmELqCMnclILj4eGSi5caRY7j7HpeFv4UOmivKtBIYvkVLY4', '2018-06-14 17:35:57', '2018-06-14 17:35:57'),
+	(2, 'Sergio Leon', 'sergio.leon@isss.com.sv', '$2y$10$jFFZ..eRt1EnI6VkpRI6/utpTE/w4WtBxOxfxrD701jsXFQPyVp92', 'sfulsju3INSECavvf8yLwHdMR376V1GhJM5hA0pNUWsMUIbFQLz1K1F6qRfx', '2018-06-16 03:20:34', '2018-06-16 03:20:34');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
