@@ -112,7 +112,8 @@ class equipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-        return view('equipos.info',compact('equipment'));
+        //return view('equipos.info',compact('equipment'));
+        return $equipment;
     }
 
     /**

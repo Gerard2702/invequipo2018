@@ -14,8 +14,8 @@
             <thead>
             <tr class="thead-light">
                 <th class="text-center col-md-5">Centro de Costo</th>
-                <th class="text-center col-md-4">Ubicacion</th>
-                <th class="text-center col-md-3">Opciones</th>
+                <th class="text-center col-md-5">Ubicacion</th>
+                <th class="text-center col-md-2">Opciones</th>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +58,20 @@
 @section('scripts')
     <script>
         $('#data-table-select').DataTable({
-
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraton registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros ",
+                "infoEmpty": "No se encontraton registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "search": "Buscar: "
+            }
         });
 
         $(document).ready(function() {

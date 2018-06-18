@@ -26,7 +26,7 @@
                     <td>{{$equipment->usuario}}</td>
                     <td class="with-btn text-center">
                         {!! Form::open(['route'=>['equipments.destroy',$equipment->id],'method'=>'DELETE']) !!}
-                        <a href="{{route('equipments.show',$equipment->id)}}" class="btn btn-sm btn-primary">Ver</a>
+                        <a href="{{route('equipments.show',$equipment->id)}}" class="btn btn-sm btn-info">Ver</a>
                         {!! Form::submit('Eliminar',['class'=>'btn btn-sm btn-danger']) !!}
                         {!! Form::close() !!}
                     </td>
