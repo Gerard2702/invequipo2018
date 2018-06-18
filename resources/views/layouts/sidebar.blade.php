@@ -9,7 +9,13 @@
                 <li><a href="{{route('bitacora.index')}}"><span>Ver Bitacoras</span></a></li>
             </ul>
         </li>
-        <li class="@yield('equipments')"><a href="{{route('equipments.index')}}"><i class="fa fa-desktop"></i><span>Equipos</span></a></li>
+        <li class="@yield('equipments')">
+            <a href=""><i class="fa fa-user"></i><span>Equipos</span><i class="fa fa-angle-right pull-right"></i></a>
+            <ul class="nav nav-sub @yield('equipments-ul')">
+                <li><a href="{{route('equipments.create')}}"><span>Agregar Equipo</span></a></li>
+                <li><a href="{{route('equipments.index')}}"><span>Ver Equipos</span></a></li>
+            </ul>
+        </li>
         <li class="@yield('departments')"><a href="{{route('departments.index')}}"><i class="fa fa-building-o"></i><span>Departamentos</span></a>
         <li class="@yield('services-types')"><a href="{{route('services.index')}}"><i class="fa fa-info-circle"></i><span>Tipos de Servicio</span></a></li>
         <li class="@yield('equipments-types')"><a href="{{route('equipmentstypes.index')}}"><i class="fa fa-desktop"></i><span>Tipos de Equipo</span></a></li>

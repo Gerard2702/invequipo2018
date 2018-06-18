@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Bitacora extends Model
+class Nivel extends Model
 {
     //
 }
