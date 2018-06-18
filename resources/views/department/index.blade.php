@@ -83,9 +83,9 @@
             });
         });
         @if(session('success'))
-        $.notify("{{session('success')}}", "success",{ position: 'bottom right',click: true});
+            toastr.success('{{session('success')}}',{timeOut: 3000});
         @elseif(session('error'))
-        $.notify("{{session('error')}}", "error",{ position: 'bottom right',click: true});
+            toastr.error('{{session('error')}}',{timeOut: 3000});
         @endif
     </script>
 @endsection

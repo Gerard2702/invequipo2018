@@ -5,7 +5,7 @@
 @section('content-title','Equipos')
 @section('content')
     <div class="table-responsive">
-        <table class="table table-hover table-sm">
+        <table class="table table-hover table-sm" id="data-table-select">
             <thead>
                 <tr>
                     <th># Inventario</th>
@@ -20,10 +20,10 @@
             @foreach($equipments as $equipment)
                 <tr>
                     <td>{{$equipment->numero_inventario}}</td>
-                    <td>{{$equipment->id_tipo_equipo}}</td>
+                    <td>{{$equipment->tipo_equipo}}</td>
                     <td>{{$equipment->ubicacion}}</td>
-                    <td>{{$equipment->id_centro_costo}}</td>
-                    <td>{{$equipment->id_usuario}}</td>
+                    <td>{{$equipment->centro_costo}}</td>
+                    <td>{{$equipment->usuario}}</td>
                     <td class="with-btn text-center">
                         {!! Form::open(['route'=>['equipments.destroy',$equipment->id],'method'=>'DELETE']) !!}
                         <a href="{{route('equipments.show',$equipment->id)}}" class="btn btn-sm btn-primary">Ver</a>
@@ -38,6 +38,22 @@
 @endsection
 @section('scripts')
     <script>
+        $('#data-table-select').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraton registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros ",
+                "infoEmpty": "No se encontraton registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "search": "Buscar: "
+            }
+        });
 
     </script>
 @endsection

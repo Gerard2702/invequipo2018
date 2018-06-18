@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/plugins/datatables/datatables.css"/>
 <link rel="stylesheet" href="/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.standalone.css"/>
 <link rel="stylesheet" href="/plugins/select2/dist/css/select2.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <!-- FIN PLUGINS -->
 
 <!-- ESTILOS  -->

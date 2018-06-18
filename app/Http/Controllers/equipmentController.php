@@ -20,8 +20,14 @@ class equipmentController extends Controller
      */
     public function index()
     {
-        $equipments = Equipment::all();
+        $equipments = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
+            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
+            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
+            ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario')
+            ->get();;
         return view('equipos.index',compact('equipments'));
+
     }
 
     /**

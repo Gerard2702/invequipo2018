@@ -8,9 +8,8 @@
 @endsection
 @section('scripts')
     <script>
-
         @if(session('success'))
-            $.notify("{{session('success')}}", "success",{ position: 'bottom right',click: true});
+            toastr.success('{{session('success')}}',{timeOut: 3000});
         @endif
     </script>
 @endsection
