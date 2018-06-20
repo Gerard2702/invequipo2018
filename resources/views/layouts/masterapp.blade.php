@@ -27,7 +27,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown dropdown-usermenu">
                     <a href="#" class=" dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        <div class="user-avatar"><img src="img/edit-user.png" alt="usuario img"></div>
+                        <div class="user-avatar"><img src="/img/edit-user.png" alt="usuario img"></div>
                         <span class="hidden-sm hidden-xs">{{ Auth::user()->name }}</span>
                         <span class="caret hidden-sm hidden-xs"></span>
                     </a>

@@ -27,6 +27,10 @@ Route::resource('admins','AdminController');
 
 Route::resource('bitacora','BitacoraController');
 
+Route::get('/bitacora/cargar/{id}','BitacoraController@cargar');
+
+Route::get('/bitacora/bitacoras/{fecha}','BitacoraController@bitacoras');
+
 Route::resource('equipmentstypes','EquipmentTypeController');
 
 Route::resource('inventory','InventoryController');

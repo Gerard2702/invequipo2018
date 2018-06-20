@@ -18,6 +18,7 @@ class CreateMiusersTable extends Migration
             $table->string('nombre');
             $table->unsignedInteger('id_department');
             $table->foreign('id_department')->references('id')->on('departments');
+            $table->string('telefono');
             $table->timestamps();
         });
     }

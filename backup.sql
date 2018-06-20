@@ -30,11 +30,16 @@ CREATE TABLE IF NOT EXISTS `bitacoras` (
   KEY `bitacoras_id_tipo_servicio_foreign` (`id_tipo_servicio`),
   CONSTRAINT `bitacoras_id_equipo_foreign` FOREIGN KEY (`id_equipo`) REFERENCES `equipment` (`id`),
   CONSTRAINT `bitacoras_id_tipo_servicio_foreign` FOREIGN KEY (`id_tipo_servicio`) REFERENCES `services` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla inventario_informatico.bitacoras: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla inventario_informatico.bitacoras: ~3 rows (aproximadamente)
 DELETE FROM `bitacoras`;
 /*!40000 ALTER TABLE `bitacoras` DISABLE KEYS */;
+INSERT INTO `bitacoras` (`id`, `id_equipo`, `id_tipo_servicio`, `descripcion`, `fecha`, `created_at`, `updated_at`) VALUES
+	(1, 2, 3, 'sdasdasdasdasdasdasdas asdasdasd asdasdasdasddsasd', '2018-06-20', '2018-06-20 00:16:56', '2018-06-20 00:16:56'),
+	(2, 3, 2, 'mantenimiento de red domestica', '2018-06-20', '2018-06-20 00:20:00', '2018-06-20 00:20:00'),
+	(3, 3, 4, 'asdasdasdasdasdasdsas asdasdadad', '2018-06-01', '2018-06-20 00:32:51', '2018-06-20 00:32:51'),
+	(4, 5, 2, 'Se encontro falla en la conexion a internet', '2018-06-06', '2018-06-20 01:28:31', '2018-06-20 01:28:31');
 /*!40000 ALTER TABLE `bitacoras` ENABLE KEYS */;
 
 -- Volcando estructura para tabla inventario_informatico.departments
@@ -71,7 +76,7 @@ INSERT INTO `departments` (`id`, `centro_costo`, `ubicacion`, `created_at`, `upd
 	(19, '537B03', '537B03', '2018-06-15 22:31:56', '2018-06-15 22:31:56'),
 	(20, '537A08', '537A08', '2018-06-15 22:34:09', '2018-06-15 22:34:09'),
 	(21, '537103', '537103', '2018-06-15 22:36:32', '2018-06-15 22:36:32'),
-	(22, '250304', '250304', '2018-06-15 22:39:34', '2018-06-18 16:28:10'),
+	(22, '250304', '250304', '2018-06-15 22:39:34', '2018-06-19 18:34:03'),
 	(23, '537102', '537102', '2018-06-15 22:39:58', '2018-06-15 22:39:58'),
 	(24, '537109', '537109', '2018-06-15 22:41:45', '2018-06-15 22:41:45'),
 	(27, '537006', 'Informatica', '2018-06-16 03:12:09', '2018-06-16 03:12:39');
@@ -267,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `miusers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_department` int(10) unsigned NOT NULL,
+  `telefono` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -274,14 +280,14 @@ CREATE TABLE IF NOT EXISTS `miusers` (
   CONSTRAINT `miusers_id_department_foreign` FOREIGN KEY (`id_department`) REFERENCES `departments` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla inventario_informatico.miusers: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla inventario_informatico.miusers: ~4 rows (aproximadamente)
 DELETE FROM `miusers`;
 /*!40000 ALTER TABLE `miusers` DISABLE KEYS */;
-INSERT INTO `miusers` (`id`, `nombre`, `id_department`, `created_at`, `updated_at`) VALUES
-	(1, 'Martiza Aquino', 12, '2018-06-17 19:02:43', '2018-06-17 19:02:44'),
-	(2, 'Reina Chávez', 7, '2018-06-17 19:03:45', '2018-06-17 19:03:46'),
-	(5, 'Cesar Flores', 8, '2018-06-17 19:04:12', '2018-06-17 19:04:13'),
-	(6, ' Lic. Alba Yanira Paz', 6, '2018-06-18 01:33:04', '2018-06-18 01:33:05');
+INSERT INTO `miusers` (`id`, `nombre`, `id_department`, `telefono`, `created_at`, `updated_at`) VALUES
+	(1, 'Martiza Aquino', 12, '7598-4512', '2018-06-17 19:02:43', '2018-06-17 19:02:44'),
+	(2, 'Reina Chávez', 7, '2452-4521', '2018-06-17 19:03:45', '2018-06-17 19:03:46'),
+	(5, 'Cesar Flores', 8, '2145-8745', '2018-06-17 19:04:12', '2018-06-17 19:04:13'),
+	(6, ' Lic. Alba Yanira Paz', 6, '1295-4545', '2018-06-18 01:33:04', '2018-06-18 01:33:05');
 /*!40000 ALTER TABLE `miusers` ENABLE KEYS */;
 
 -- Volcando estructura para tabla inventario_informatico.nivels
@@ -356,11 +362,17 @@ CREATE TABLE IF NOT EXISTS `services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla inventario_informatico.services: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla inventario_informatico.services: ~5 rows (aproximadamente)
 DELETE FROM `services`;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
+INSERT INTO `services` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+	(1, 'Hardware', '2018-06-19 23:42:42', '2018-06-19 23:42:43'),
+	(2, 'Red', '2018-06-19 23:42:48', '2018-06-19 23:42:49'),
+	(3, 'Software', '2018-06-19 23:42:56', '2018-06-19 23:42:56'),
+	(4, 'Virus', '2018-06-19 23:43:03', '2018-06-19 23:43:04'),
+	(5, 'Otros', '2018-06-19 23:43:17', '2018-06-19 23:43:18');
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 
 -- Volcando estructura para tabla inventario_informatico.users
