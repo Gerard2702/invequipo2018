@@ -25,7 +25,7 @@ class equipmentController extends Controller
             ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
             ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
             ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario')
-            ->get();;
+            ->get();
         return view('equipos.index',compact('equipments'));
 
     }
@@ -97,6 +97,7 @@ class equipmentController extends Controller
         $equipment->id_estado_equipo=$request->input('estado');
         $equipment->fecha_adquisicion=$request->input('fecha_adquisicion');
         $equipment->fecha_vencimiento=$request->input('fecha_vencimiento');
+        $equipment->observaciones = $request->input('observaciones');
         if(!$equipment->save()){
             App::abort(500, 'Error');
         }else{
@@ -110,10 +111,22 @@ class equipmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Equipment $equipment)
+    public function show($id)
     {
-        //return view('equipos.info',compact('equipment'));
-        return $equipment;
+
+        $equipment = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
+            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
+            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
+            ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->join('marcas', 'equipment.id_marca', '=', 'marcas.id')
+            ->join('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
+            ->leftjoin('perifericos', 'equipment.id_cd', '=', 'perifericos.id')
+            ->leftjoin('direccions', 'equipment.id_direccionip', '=', 'direccions.id')
+            ->leftjoin('domains', 'equipment.id_dominio', '=', 'domains.id')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','perifericos.nombre as cd','direccions.nombre as direccionip','domains.nombre as dominio','marcas.nombre as marca','estates.nombre as estado')
+            ->where('equipment.id','=',$id)
+            ->get();
+        return view('equipos.info',compact('equipment'));
     }
 
     /**

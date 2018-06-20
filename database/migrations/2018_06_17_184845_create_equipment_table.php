@@ -36,6 +36,7 @@ class CreateEquipmentTable extends Migration
             $table->unsignedInteger('id_cd');
             $table->foreign('id_cd')->references('id')->on('perifericos');
             $table->string('sistema_operativo');
+            $table->string('licencia_sistema');
             $table->string('office');
             $table->string('licencia_office');
             $table->string('sistemas_institucionales');
