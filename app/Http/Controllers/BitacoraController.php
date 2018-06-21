@@ -25,7 +25,13 @@ class BitacoraController extends Controller
             ->select('bitacoras.*','equipment.numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion','miusers.nombre as usuario')
             ->where('bitacoras.fecha','=',$fecha)
             ->get();
-        return view('bitacora.index',compact('bitacoras','fecha'));
+        $row = count($bitacoras);
+        $error = 'No se encontraron Bitacoras en la fecha seleccionada';
+        if($row==0){
+            return view('bitacora.index',compact('bitacoras','fecha','error'));
+        }else{
+            return view('bitacora.index',compact('bitacoras','fecha'));
+        }
     }
 
     /**
@@ -139,6 +145,13 @@ class BitacoraController extends Controller
             ->select('bitacoras.*','equipment.numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion','miusers.nombre as usuario')
             ->where('bitacoras.fecha','=',$fecha)
             ->get();
-        return view('bitacora.bitacoras',compact('bitacoras'));
+        $row = count($bitacoras);
+        $error = 'No se encontraron Bitacoras en la fecha seleccionada';
+        if($row==0){
+            return view('bitacora.bitacoras',compact('bitacoras','error'));
+        }else{
+            return view('bitacora.bitacoras',compact('bitacoras'));
+        }
+        //return view('bitacora.bitacoras',compact('bitacoras'));
     }
 }

@@ -64,6 +64,10 @@
             });
         });
 
+        @if(isset($error))
+        toastr.error('{{$error}}',{timeOut: 3000});
+        @endif
+
         $('.fecha').datepicker({
             todayBtn: "linked",
             format: 'yyyy-mm-dd',

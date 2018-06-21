@@ -13,3 +13,8 @@
         </td>
     </tr>
 @endforeach
+<script>
+    @if(isset($error))
+    toastr.error('{{$error}}',{timeOut: 3000});
+    @endif
+</script>
