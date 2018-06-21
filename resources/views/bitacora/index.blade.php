@@ -7,15 +7,13 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
             <div class="form-group">
-                {!! Form::date('fecha', \Carbon\Carbon::now(),['class'=>'form-control input-sm','required'=>'true','id'=>'fecha']) !!}
-            </div>
-            <div class="form-group">
-                <a href="#" class="btn btn-sm btn-primary" id="cargar">Cargar Soportes</a>
+                {!! Form::text('fecha', null,['class'=>'form-control fecha input-sm','required'=>'true','id'=>'fecha','placeholder'=>'Seleccione una fecha','data-date-end-date'=>'0d']) !!}
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
+            <h4>Reporte Bitacoras de la fecha : <strong id="txtfecha">{{$fecha}}</strong></h4>
             <div class="table-responsive">
                 <table class="table-hover table-sm table">
                     <thead>
@@ -53,7 +51,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $('#cargar').click(function (e) {
+            $('#fecha').change(function (e) {
                 e.preventDefault();
                 var fecha = $('#fecha').val();
                 $.ajax({
@@ -61,8 +59,19 @@
                     url: '/bitacora/bitacoras/'+fecha
                 }).done(function (data) {
                     $('#table-bitacoras').html(data);
+                    $('#txtfecha').html(fecha);
                 });
             });
-        })
+        });
+
+        $('.fecha').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd',
+            clearBtn: true,
+            language: "es",
+            autoclose: true,
+            todayHighlight: true,
+            disableTouchKeyboard: true,
+        });
     </script>
 @endsection

@@ -14,5 +14,5 @@
 <!-- FIN ESTILOS -->
 
 <script src="/js/modernizr-custom.js"></script>
-<script src="/js/core.js"></script>
+
 

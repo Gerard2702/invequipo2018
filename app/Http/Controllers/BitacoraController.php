@@ -25,7 +25,7 @@ class BitacoraController extends Controller
             ->select('bitacoras.*','equipment.numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion','miusers.nombre as usuario')
             ->where('bitacoras.fecha','=',$fecha)
             ->get();
-        return view('bitacora.index',compact('bitacoras'));
+        return view('bitacora.index',compact('bitacoras','fecha'));
     }
 
     /**

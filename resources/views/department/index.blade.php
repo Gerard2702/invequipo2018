@@ -24,9 +24,9 @@
                     <td class="text-center">{{$department->centro_costo}}</td>
                     <td class="text-center">{{$department->ubicacion}}</td>
                     <td class="with-btn text-center">
-                        {!! Form::open(['route'=>['departments.destroy',$department->id],'method'=>'DELETE']) !!}
+                        {!! Form::open(['route'=>['departments.destroy',$department->id],'method'=>'DELETE','id'=>"frmeliminar$department->id"]) !!}
                             <a href="#" class="btn btn-sm btn-primary edit" data-department="{{$department->id}}">Modificar</a>
-                            {!! Form::submit('Eliminar',['class'=>'btn btn-sm btn-danger']) !!}
+                            <a href="#" class="btn btn-sm btn-danger eliminar" data-department="{{$department->id}}" data-content="{{$department->centro_costo}}">Eliminar</a>
                         {!! Form::close() !!}
                     </td>
                 </tr>
@@ -84,7 +84,7 @@
                 });
             });
 
-            $('.edit').click( function() {
+            $("#data-table-select").on("click", ".edit", function(){
                 let key = $(this).data('department');
                 $.ajax({
                     method: 'GET',
@@ -92,6 +92,16 @@
                 }).done(function (data) {
                     $('#conten-modal').html(data);
                     $('#myModal').modal('show');
+                });
+            });
+
+            $('#data-table-select').on("click",".eliminar",function () {
+                let key = $(this).data('department');
+                let centro_costo = $(this).data('content');
+                bootbox.confirm("Desea Eliminar el Departamento "+centro_costo+"?", function(result){
+                    if(result){
+                        $('#frmeliminar'+key).submit();
+                    }
                 });
             });
         });

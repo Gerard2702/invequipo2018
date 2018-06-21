@@ -5,11 +5,10 @@
 <script src="/plugins/datatables/datatables.min.js"></script>
 <script src="/js/nicescroll.min.js"></script>
 <script src="/js/autosize.min.js"></script>
-<script src="/plugins/sweetalert/sweetalert.min.js"></script>
 <script src="/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
 <script src="/plugins/select2/dist/js/select2.min.js"></script>
-<!-- endinject -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 
 <!-- Common Script   -->

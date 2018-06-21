@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
         {!! Form::label('fecha','Fecha') !!}
-        {!! Form::date('fecha', \Carbon\Carbon::now(),['class'=>'form-control input-sm','required'=>'true']) !!}
+        {!! Form::text('fecha',null,['class'=>'form-control fecha input-sm','required'=>'true','placeholder'=>'Seleccione una fecha','data-date-end-date'=>'0d']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('descripcion','Descripcion de falla') !!}
@@ -43,4 +43,13 @@
 </div>
 <script>
     $('.servicios_select').select2({ placeholder: "Seleccione un tipo de servicio", allowClear: true});
+    $('.fecha').datepicker({
+        todayBtn: "linked",
+        format: 'yyyy-mm-dd',
+        clearBtn: true,
+        language: "es",
+        autoclose: true,
+        todayHighlight: true,
+        disableTouchKeyboard: true,
+    });
 </script>
