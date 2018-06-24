@@ -14,8 +14,8 @@
     <div class="row">
         <div class="col-md-12">
             <h4>Reporte Bitacoras de la fecha : <strong id="txtfecha">{{$fecha}}</strong></h4>
-            <div class="table-responsive">
-                <table class="table-hover table-sm table">
+            <div class="table-responsive" id="table-bitacoras">
+                <table class="table-hover table-sm table" id="data-table-select">
                     <thead>
                     <tr>
                         <th>Num. Inventario</th>
@@ -26,7 +26,7 @@
                         <th>Opciones</th>
                     </tr>
                     </thead>
-                    <tbody id="table-bitacoras">
+                    <tbody>
                     @foreach($bitacoras as $bitacora)
                         <tr>
                             <td>{{$bitacora->numero_inventario}}</td>
@@ -35,15 +35,35 @@
                             <td>{{$bitacora->usuario}}</td>
                             <td>{{$bitacora->servicio}}</td>
                             <td>
-                                {!! Form::open(['route'=>['departments.destroy',$bitacora->id],'method'=>'DELETE']) !!}
-                                <a href="#" class="btn btn-sm btn-primary edit" data-department="{{$bitacora->id}}">Modificar</a>
-                                {!! Form::submit('Eliminar',['class'=>'btn btn-sm btn-danger']) !!}
+                                {!! Form::open(['route'=>['bitacora.destroy',$bitacora->id],'method'=>'DELETE','id'=>"frmeliminar$bitacora->id"]) !!}
+                                <a href="#" class="btn btn-sm btn-success ver" data-content="{{$bitacora->id}}">Ver o Editar</a>
+                                <a href="#" class="btn btn-sm btn-danger eliminar" data-department="{{$bitacora->id}}" data-content="{{$bitacora->numero_inventario}}">Eliminar</a>
                                 {!! Form::close() !!}
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title">Bitacora</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="conten-modal">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -62,12 +82,35 @@
                     $('#txtfecha').html(fecha);
                 });
             });
+
+            $('#data-table-select').on("click",".ver",function () {
+                let key = $(this).data('content');
+                $.ajax({
+                    method: 'GET',
+                    url: '/bitacora/'+key+'/edit'
+                }).done(function (data) {
+                    $('#conten-modal').html(data);
+                    $('#myModal').modal('show');
+                });
+            });
+
+            $('#data-table-select').on("click",".eliminar",function () {
+                let key = $(this).data('department');
+                let bitacora = $(this).data('content');
+                bootbox.confirm("Desea Eliminar el Departamento "+bitacora+"?", function(result){
+                    if(result){
+                        $('#frmeliminar'+key).submit();
+                    }
+                });
+            });
         });
 
         @if(isset($error))
         toastr.error('{{$error}}',{timeOut: 3000});
         @endif
-
+        @if(session('success'))
+        toastr.success('{{session('success')}}',{timeOut: 3000});
+        @endif
         $('.fecha').datepicker({
             todayBtn: "linked",
             format: 'yyyy-mm-dd',
@@ -76,6 +119,23 @@
             autoclose: true,
             todayHighlight: true,
             disableTouchKeyboard: true,
+        });
+
+        $('#data-table-select').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraton registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros ",
+                "infoEmpty": "No se encontraton registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "search": "Buscar: "
+            }
         });
     </script>
 @endsection

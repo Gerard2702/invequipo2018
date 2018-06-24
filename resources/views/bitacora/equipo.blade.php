@@ -37,7 +37,7 @@
         {!! Form::hidden('equipo', $equipment[0]->id) !!}
     </div>
     <div class="form-group">
-        {!! Form::submit('Agregar Bitacora',['class'=>'btn btn-primary']) !!}
+        {!! Form::submit('Editar Bitacora',['class'=>'btn btn-primary']) !!}
     </div>
 {!! Form::close() !!}
 </div>

@@ -34,6 +34,24 @@ class BitacoraController extends Controller
         }
     }
 
+    public function index2($fecha)
+    {
+        $bitacoras = Bitacora::join('equipment','bitacoras.id_equipo','=','equipment.id')
+            ->join('services','bitacoras.id_tipo_servicio','=','services.id')
+            ->join('equipmentypes','equipment.id_tipo_equipo','=','equipmentypes.id')
+            ->join('miusers','equipment.id_usuario','=','miusers.id')
+            ->select('bitacoras.*','equipment.numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion','miusers.nombre as usuario')
+            ->where('bitacoras.fecha','=',$fecha)
+            ->get();
+        $row = count($bitacoras);
+        $error = 'No se encontraron Bitacoras en la fecha seleccionada';
+        if($row==0){
+            return view('bitacora.index',compact('bitacoras','fecha','error'));
+        }else{
+            return view('bitacora.index',compact('bitacoras','fecha'));
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -88,9 +106,24 @@ class BitacoraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Bitacora $bitacora)
     {
-        //
+        $equipment = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
+            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
+            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
+            ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->join('marcas', 'equipment.id_marca', '=', 'marcas.id')
+            ->join('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','marcas.nombre as marca','estates.nombre as estado')
+            ->where('equipment.id','=',$bitacora->id_equipo)
+            ->get();
+
+        $servicios = Service::all();
+        $servicios_options = [];
+        foreach ($servicios as $servicio){
+            $servicios_options[$servicio->id]=$servicio->nombre;
+        }
+        return view('bitacora.edit',compact('bitacora','equipment','servicios_options'));
     }
 
     /**
@@ -100,9 +133,14 @@ class BitacoraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bitacora $bitacora)
     {
-        //
+        $bitacora->fill($request->all());
+        if(!$bitacora->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('bitacora/set/'.$bitacora->fecha)->with('success', 'Bitacora Actualizada!');
+        }
     }
 
     /**
@@ -111,9 +149,14 @@ class BitacoraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Bitacora $bitacora)
     {
-        //
+        $fecha = $bitacora->fecha;
+        if(!$bitacora->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('bitacora/set/'.$fecha)->with('success', 'Bitacora Eliminada!');
+        }
     }
 
     public function cargar($id){
@@ -152,6 +195,5 @@ class BitacoraController extends Controller
         }else{
             return view('bitacora.bitacoras',compact('bitacoras'));
         }
-        //return view('bitacora.bitacoras',compact('bitacoras'));
     }
 }
