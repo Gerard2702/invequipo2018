@@ -196,4 +196,73 @@ class BitacoraController extends Controller
             return view('bitacora.bitacoras',compact('bitacoras'));
         }
     }
+
+    public function generate($fecha){
+        $bitacoras = Bitacora::join('equipment','bitacoras.id_equipo','=','equipment.id')
+            ->join('services','bitacoras.id_tipo_servicio','=','services.id')
+            ->join('equipmentypes','equipment.id_tipo_equipo','=','equipmentypes.id')
+            ->join('miusers','equipment.id_usuario','=','miusers.id')
+            ->join('departments','equipment.id_centro_costo','=','departments.id')
+            ->select('bitacoras.*','equipment.numero_inventario as numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion as ubicacion','miusers.nombre as usuario','miusers.telefono as telefono','departments.centro_costo')
+            ->where('bitacoras.fecha','=',$fecha)
+            ->get();
+
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+        $section = $phpWord->addSection(array('orientation' => 'landscape','marginLeft'=>'500','marginRight'=>'500'));
+        $text = 'CENTRO DE ATENCION AL CUAL PERTENECEN LOS EQUIPOS: Consultorio Especialidades';
+        $fecha = 'FECHA: '.$fecha;
+        $section->addText($text);
+        $section->addText($fecha);
+        $tableStyle = array(
+            'borderColor' => '4c4c4c',
+            'borderSize'  => 6,
+            'cellMargin'  => 50
+        );
+        $header = array(
+            'bgColor' => '031b64'
+        );
+        $white = array(
+            'color' => 'FFFFFF'
+        );
+        $table = $section->addTable($tableStyle);
+        $table->addRow(900, array('tblHeader' => true));
+        $table->addCell(200, $header)->addText('CENTRO DE COSTO',$white);
+        $table->addCell(300, $header)->addText('NOMBRE DEL RESPONSABLE DEL EQUIPO',$white);
+        $table->addCell(700, $header)->addText('UBICACIÓN',$white);
+        $table->addCell(200, $header)->addText('TELÉFONO DEL RESPONSABLE',$white);
+        $table->addCell(300, $header)->addText('TIPO DE EQUIPO',$white);
+        $table->addCell(200, $header)->addText('NO. INVENTARIO',$white);
+        $table->addCell(700, $header)->addText('DESCRIPCIÓN DE LA FALLA',$white);
+        $table->addCell(200, $header)->addText('TIPO DE SERVICIO',$white);
+        $table->addCell(200, $header)->addText('ESTADO',$white);
+        $table->addCell(200, $header)->addText('TIPO DE ATENCIÓN',$white);
+        $table->addCell(200, $header)->addText('# DE REQUERIMIENTO',$white);
+
+        foreach ($bitacoras as $bitacora){
+            $table->addRow();
+            $table->addCell(200)->addText($bitacora->centro_costo);
+            $table->addCell(300)->addText($bitacora->usuario);
+            $table->addCell(700)->addText($bitacora->ubicacion);
+            $table->addCell(200)->addText($bitacora->telefono);
+            $table->addCell(300)->addText($bitacora->tipo_equipo);
+            $table->addCell(200)->addText($bitacora->numero_inventario);
+            $table->addCell(700)->addText($bitacora->descripcion);
+            $table->addCell(200)->addText($bitacora->servicio);
+            $table->addCell(200)->addText('Terminado');
+            $table->addCell(200)->addText('Presencial');
+            $table->addCell(200)->addText('');
+        }
+        $n = "";
+        $text = "Técnico mantenimiento Tecnológico: Ing. Sergio D. León TEL: 25914524";
+        $section->addText($n);
+        $section->addText($n);
+        $section->addText($text);
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save(storage_path('test.docx'));
+
+        return response()->download(storage_path('test.docx'));
+
+    }
 }

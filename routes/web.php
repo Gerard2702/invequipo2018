@@ -33,6 +33,8 @@ Route::get('/bitacora/bitacoras/{fecha}','BitacoraController@bitacoras');
 
 Route::get('/bitacora/set/{fecha}','BitacoraController@index2')->name('bitacoranew');
 
+Route::get('/bitacora/generate/{fecha}','BitacoraController@generate')->name('bitacora-generate');
+
 Route::resource('equipmentstypes','EquipmentTypeController');
 
 Route::resource('inventory','InventoryController');
