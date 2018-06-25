@@ -13,7 +13,8 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        //
+      $marcas = Marca::all();
+        return view('marca.index',compact('marca'));  //
     }
 
     /**
@@ -23,7 +24,7 @@ class MarcaController extends Controller
      */
     public function create()
     {
-        //
+       return view('marca.create'); //
     }
 
     /**
@@ -34,7 +35,13 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $marca = new Marca();
+        $marca->nombre = $request->input('nombre');
+        if(!$marca->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('marcas')->with('success', 'Marca registrada!');
+        } //
     }
 
     /**
@@ -56,7 +63,7 @@ class MarcaController extends Controller
      */
     public function edit($id)
     {
-        //
+       return view('marca.edit',compact('marca')); //
     }
 
     /**
@@ -68,7 +75,12 @@ class MarcaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $marca->fill($request->all());
+        if(!$marca->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('marcas')->with('success', 'Marca Actualizada!');
+        } //
     }
 
     /**
@@ -79,6 +91,10 @@ class MarcaController extends Controller
      */
     public function destroy($id)
     {
-        //
+         if(!$marca->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('marcas')->with('success', 'Marca Eliminada!');
+        }
     }
 }
