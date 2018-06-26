@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service;
 use Illuminate\Http\Request;
 
 class ServiceTypeController extends Controller
@@ -13,7 +14,8 @@ class ServiceTypeController extends Controller
      */
     public function index()
     {
-        //
+        $services = Service::all();
+        return view('services.index',compact('services'));
     }
 
     /**
@@ -23,7 +25,7 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('services.create');
     }
 
     /**
@@ -34,7 +36,13 @@ class ServiceTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $service = new Service();
+        $service->nombre = $request->input('nombre');
+        if(!$service->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('services')->with('success', 'Servicio Registrado!');
+        }
     }
 
     /**
@@ -54,9 +62,9 @@ class ServiceTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Service $service)
     {
-        //
+        return view('services.edit',compact('service'));
     }
 
     /**
@@ -66,9 +74,14 @@ class ServiceTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Service $service)
     {
-        //
+        $service->fill($request->all());
+        if(!$service->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('services')->with('success', 'Servicio Actualizado!');
+        }
     }
 
     /**
@@ -77,8 +90,12 @@ class ServiceTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Service $service)
     {
-        //
+        if(!$service->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('services')->with('success', 'Servicio Eliminado!');
+        }
     }
 }

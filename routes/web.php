@@ -21,6 +21,18 @@ Route::get('/home', function (){
 
 Route::resource('equipments','equipmentController');
 
+Route::get('/equipment/add/caracteristicas/{id}','equipmentController@addcaracteristicas');
+
+Route::post('/equipment/store/caracteristicas/{id}','equipmentController@storeCaracteristicas')->name('equipment-store');
+
+Route::get('/equipment/add/software/{id}','equipmentController@addSoftware');
+
+Route::post('/equipment/store/software/{id}','equipmentController@storeSoftware')->name('software-store');
+
+Route::get('/equipment/add/red/{id}','equipmentController@addRed');
+
+Route::post('/equipment/store/red/{id}','equipmentController@storeRed')->name('red-store');
+
 Route::resource('departments','DepartmentController');
 
 Route::resource('admins','AdminController');
@@ -32,6 +44,8 @@ Route::get('/bitacora/cargar/{id}','BitacoraController@cargar');
 Route::get('/bitacora/bitacoras/{fecha}','BitacoraController@bitacoras');
 
 Route::get('/bitacora/set/{fecha}','BitacoraController@index2')->name('bitacoranew');
+
+Route::get('/bitacora/generate/{fecha}','BitacoraController@generate')->name('bitacora-generate');
 
 Route::resource('equipmentstypes','EquipmentTypeController');
 

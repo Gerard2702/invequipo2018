@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Equipmentype;
 use Illuminate\Http\Request;
 
 class EquipmentTypeController extends Controller
@@ -13,7 +14,8 @@ class EquipmentTypeController extends Controller
      */
     public function index()
     {
-        //
+        $equipmentstypes = Equipmentype::all();
+        return view('equipmentype.index',compact('equipmentstypes'));
     }
 
     /**
@@ -23,7 +25,7 @@ class EquipmentTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('equipmentype.create');
     }
 
     /**
@@ -34,7 +36,13 @@ class EquipmentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $equipmentype = new Equipmentype();
+        $equipmentype->nombre = $request->input('nombre');
+        if(!$equipmentype->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Registrado!');
+        }
     }
 
     /**
@@ -56,7 +64,8 @@ class EquipmentTypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $equipmentype = Equipmentype::find($id);
+        return view('equipmentype.edit',compact('equipmentype'));
     }
 
     /**
@@ -68,7 +77,13 @@ class EquipmentTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $equipmentype = Equipmentype::find($id);
+        $equipmentype->fill($request->all());
+        if(!$equipmentype->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Actualizado!');
+        }
     }
 
     /**
@@ -79,6 +94,11 @@ class EquipmentTypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $equipmentype = Equipmentype::find($id);
+        if(!$equipmentype->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Eliminado!');
+        }
     }
 }
