@@ -2,7 +2,10 @@
 @section('title','Equipments Info')
 @section('equipments','active')
 @section('equipments-ul','nav-sub--open')
-@section('content-title','Equipos')
+@section('content-title')
+    Equipos
+    <a href="{{route('inventario-generate')}}" class="btn btn-warning">Generar Reporte de Inventario</a>
+@endsection
 @section('content')
     <div class="table-responsive">
         <table class="table table-hover table-sm" id="data-table-select">

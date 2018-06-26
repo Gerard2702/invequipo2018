@@ -10,19 +10,19 @@
             <div class="form-group">
                 {!! Form::label('tipo_equipo', 'Tipo de Equipo',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('tipo_equipo',$tipo_equipo_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('tipo_equipo',$tipo_equipo_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
                 {!! Form::label('centro_costo', 'Centro de Costo',['class'=>'col-md-3 control-label']) !!}
                 <dic class="col-md-9">
-                    {!! Form::select('centro_costo',$departments_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('centro_costo',$departments_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </dic>
             </div>
             <div class="form-group">
                 {!! Form::label('nivel', 'Nivel',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('nivel',$nivels_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('nivel',$nivels_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -34,7 +34,7 @@
             <div class="form-group">
                 {!! Form::label('usuario', 'Usuario',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('usuario',$usuarios_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('usuario',$usuarios_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -46,7 +46,7 @@
             <div class="form-group">
                 {!! Form::label('marca', 'Marca',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-3">
-                    {!! Form::select('marca',$marcas_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('marca',$marcas_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
                 <div class="col-md-3">
                     {!! Form::text('modelo',null,['class'=>'form-control input-sm','placeholder'=>'Modelo','required'=>'true']) !!}
@@ -58,19 +58,19 @@
             <div class="form-group">
                 {!! Form::label('estado', 'Estado Equipo',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('estado',$estados_options, null, ['class'=>'form-control input-sm miselect']) !!}
+                    {!! Form::select('estado',$estados_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
                 {!! Form::label('fecha_adquisicion', 'Fecha adquisicion',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!!Form::date('fecha_adquisicion', \Carbon\Carbon::now(),['class'=>'form-control input-sm']) !!}
+                    {!!Form::text('fecha_adquisicion', null,['class'=>'form-control input-sm fecha','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
                 {!! Form::label('fecha_vencimiento', 'Fecha vencimiento',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!!Form::date('fecha_vencimiento', \Carbon\Carbon::now(),['class'=>'form-control input-sm']) !!}
+                    {!!Form::text('fecha_vencimiento',null,['class'=>'form-control input-sm fecha','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -93,6 +93,16 @@
         $('.miselect').select2({
             placeholder: "",
             allowClear: true
+        });
+
+        $('.fecha').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd',
+            clearBtn: true,
+            language: "es",
+            autoclose: true,
+            todayHighlight: true,
+            disableTouchKeyboard: true,
         });
     </script>
 @endsection

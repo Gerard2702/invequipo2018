@@ -33,6 +33,8 @@ Route::get('/equipment/add/red/{id}','equipmentController@addRed');
 
 Route::post('/equipment/store/red/{id}','equipmentController@storeRed')->name('red-store');
 
+Route::get('/equipment//','equipmentController@generate')->name('inventario-generate');
+
 Route::resource('departments','DepartmentController');
 
 Route::resource('admins','AdminController');

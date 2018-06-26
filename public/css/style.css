@@ -2,6 +2,12 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+.separate{
+	border: 1px solid #3B82B7;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
 .text-error{
 	color: red;
 }

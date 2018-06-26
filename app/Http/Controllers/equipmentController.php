@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Department;
+use App\Direccion;
+use App\Domain;
 use App\Equipment;
 use App\Equipmentype;
 use App\Estate;
@@ -213,6 +215,35 @@ class equipmentController extends Controller
             App::abort(500, 'Error');
         }else{
             return redirect()->route('equipments.show',$id)->with('success', 'Softwares Agregados!');
+        }
+    }
+
+    public function addRed($id){
+        $equipment = Equipment::find($id);
+        $direccion = Direccion::all();
+        $direccion_option = [];
+        $direccion_option['']='';
+        foreach ($direccion as $dir){
+            $direccion_option[$dir->id]=$dir->nombre;
+        }
+        $domain = Domain::all();
+        $domain_option = [];
+        $domain_option['']='';
+        foreach ($domain as $do){
+            $domain_option[$do->id]=$do->nombre;
+        }
+        return view('equipos.addred',compact('equipment','direccion_option','domain_option'));
+    }
+
+    public function storeRed(Request $request,$id){
+        $equipment = Equipment::find($id);
+        $equipment->nombre_equipo = $request->input('nombre_equipo');
+        $equipment->id_direccionip = $request->input('id_direccionip');
+        $equipment->id_dominio = $request->input('id_dominio');
+        if(!$equipment->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect()->route('equipments.show',$id)->with('success', 'Identificacion de Red Agregada!');
         }
     }
 }

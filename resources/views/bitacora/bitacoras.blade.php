@@ -29,7 +29,7 @@
 </table>
 @if(count($bitacoras)!=0)
     <div>
-        <a href="{{route('bitacora-generate',$bitacoras[0]->fecha)}}" class="btn btn-primary">Generar Reporte</a>
+        <a href="{{route('bitacora-generate',$bitacoras[0]->fecha)}}" class="btn btn-warning">Generar Reporte</a>
     </div>
 @endif
 <script>

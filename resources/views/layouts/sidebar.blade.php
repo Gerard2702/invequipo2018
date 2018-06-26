@@ -1,7 +1,7 @@
 <aside id="aside" class="ui-aside ui-aside--dark">
     <ul class="nav" ui-nav id="mimenu">
         <li id="inicio"><a href="{{route('home')}}"><i class="fa fa-home"></i><span> INICIO </span></a></li>
-        <li id="crearsolicitud"><a href="{{route('inventory.index')}}"><i class="fa fa-file-text-o"></i><span>Inventario</span></a></li>
+        <li id="crearsolicitud"><a href="{{route('equipments.index')}}"><i class="fa fa-file-text-o"></i><span>Inventario</span></a></li>
         <li class="@yield('bitacora')">
             <a href=""><i class="fa fa-wrench"></i><span>Bitacora</span><i class="fa fa-angle-right pull-right"></i></a>
             <ul class="nav nav-sub @yield('bitacora-ul')">
