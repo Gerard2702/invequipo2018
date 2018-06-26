@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Equipmentype;
 use Illuminate\Http\Request;
 
 class EquipmentTypeController extends Controller
@@ -13,7 +14,8 @@ class EquipmentTypeController extends Controller
      */
     public function index()
     {
-        //
+        $equipmentstypes = Equipmentype::all();
+        return view('equipmentype.index',compact('equipmentstypes'));
     }
 
     /**
@@ -23,7 +25,7 @@ class EquipmentTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('equipmentype.create');
     }
 
     /**
@@ -34,7 +36,13 @@ class EquipmentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $equipmentype = new Equipmentype();
+        $equipmentype->nombre = $request->input('nombre');
+        if(!$equipmentype->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Registrado!');
+        }
     }
 
     /**
@@ -54,9 +62,10 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Equipmentype $equipmentype)
     {
-        //
+        //return view('equipmentype.edit',compact('equipmentype'));
+        return $equipmentype;
     }
 
     /**
@@ -66,9 +75,14 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Equipmentype $equipmentype)
     {
-        //
+        $equipmentype->fill($request->all());
+        if(!$equipmentype->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Actualizado!');
+        }
     }
 
     /**
@@ -77,8 +91,12 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Equipmentype $equipmentype)
     {
-        //
+        if(!$equipmentype->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('equipmentstypes')->with('success', 'Tipo de Equipo Eliminado!');
+        }
     }
 }
