@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Miuser;
+use App\Department;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,7 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = Miuser::join('departments', 'miusers.id_department', '=', 'departments.id')
+            ->select('miusers.*', 'departments.centro_costo as centro_costo')
+            ->get();
+        return view('users.index',compact('users'));
     }
 
     /**
@@ -23,7 +28,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $departments = Department::all();
+        $departments_options = [];
+        $departments_options['']='';
+        foreach ($departments as $department){
+            $departments_options[$department->id]=$department->centro_costo;
+        }
+        return view('users.create',compact('departments_options'));
     }
 
     /**
@@ -34,7 +45,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new Miuser();
+        $user->nombre = $request->input('nombre');
+        $user->id_department = $request->input('id_department');
+        $user->telefono = $request->input('telefono');
+        if(!$user->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('users')->with('success', 'Usuario Registrado!');
+        }
     }
 
     /**
@@ -54,9 +73,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Miuser $user)
     {
-        //
+        $departments = Department::all();
+        $departments_options = [];
+        $departments_options['']='';
+        foreach ($departments as $department){
+            $departments_options[$department->id]=$department->centro_costo;
+        }
+
+        return view('users.edit',compact('user','departments_options'));
     }
 
     /**
@@ -66,9 +92,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Miuser $user)
     {
-        //
+        $user->fill($request->all());
+        if(!$user->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('users')->with('success', 'Usuario Actualizado!');
+        }
     }
 
     /**
@@ -77,8 +108,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Miuser $user)
     {
-        //
+        if(!$user->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect('users')->with('success', 'Usuario Eliminado!');
+        }
     }
 }

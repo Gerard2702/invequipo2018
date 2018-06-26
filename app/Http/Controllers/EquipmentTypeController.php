@@ -62,10 +62,10 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Equipmentype $equipmentype)
+    public function edit($id)
     {
-        //return view('equipmentype.edit',compact('equipmentype'));
-        return $equipmentype;
+        $equipmentype = Equipmentype::find($id);
+        return view('equipmentype.edit',compact('equipmentype'));
     }
 
     /**
@@ -75,8 +75,9 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Equipmentype $equipmentype)
+    public function update(Request $request, $id)
     {
+        $equipmentype = Equipmentype::find($id);
         $equipmentype->fill($request->all());
         if(!$equipmentype->save()){
             App::abort(500, 'Error');
@@ -91,8 +92,9 @@ class EquipmentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Equipmentype $equipmentype)
+    public function destroy($id)
     {
+        $equipmentype = Equipmentype::find($id);
         if(!$equipmentype->delete()){
             App::abort(500, 'Error');
         }else{
