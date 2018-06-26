@@ -9,6 +9,7 @@ use App\Estate;
 use App\Marca;
 use App\Miuser;
 use App\Nivel;
+use App\Periferico;
 use Illuminate\Http\Request;
 
 class equipmentController extends Controller
@@ -161,5 +162,57 @@ class equipmentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addcaracteristicas($id){
+
+        $equipment = Equipment::find($id);
+
+        $cds = Periferico::all();
+        $cd_options = [];
+        $cd_options['']='';
+        foreach ($cds as $cd){
+            $cd_options[$cd->id]=$cd->nombre;
+        }
+        return view('equipos.addcaracteristica',compact('equipment','cd_options'));
+    }
+
+    public function storeCaracteristicas(Request $request,$id){
+
+        $equipment = Equipment::find($id);
+        $equipment->marca_modelo = $request->input('marca_modelo');
+        $equipment->velocidad = $request->input('velocidad');
+        $equipment->ram = $request->input('ram');
+        $equipment->hdd = $request->input('hdd');
+        $equipment->id_cd = $request->input('id_cd');
+
+        if(!$equipment->save()){
+            App::abort(500, 'Error');
+        }else{
+           return redirect()->route('equipments.show',$id)->with('success', 'Caracteristicas Agregadas!');
+        }
+    }
+    public function addSoftware($id){
+
+        $equipment = Equipment::find($id);
+
+        return view('equipos.addsoftware',compact('equipment'));
+    }
+
+    public function storeSoftware(Request $request,$id){
+
+        $equipment = Equipment::find($id);
+        $equipment->sistema_operativo = $request->input('sistema_operativo');
+        $equipment->licencia_sistema = $request->input('licencia_sistema');
+        $equipment->office = $request->input('office');
+        $equipment->licencia_office = $request->input('licencia_office');
+        $equipment->sistemas_institucionales = $request->input('sistemas_institucionales');
+        $equipment->otro_software = $request->input('otro_software');
+
+        if(!$equipment->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect()->route('equipments.show',$id)->with('success', 'Softwares Agregados!');
+        }
     }
 }
