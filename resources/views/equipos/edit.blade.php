@@ -6,7 +6,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-6">
-            {!! Form::open(['route' => 'equipments.store', 'method' => 'POST','class'=>'form-horizontal']) !!}
+            {!! Form::model($equipment,['route' => ['equipments.update',$equipment], 'method' => 'PUT','class'=>'form-horizontal']) !!}
             <div class="form-group">
                 {!! Form::label('tipo_equipo', 'Tipo de Equipo',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
@@ -56,9 +56,9 @@
                 </div>
             </div>
             <div class="form-group">
-                {!! Form::label('estado', 'Estado Equipo',['class'=>'col-md-3 control-label']) !!}
+                {!! Form::label('id_estado_equipo', 'Estado Equipo',['class'=>'col-md-3 control-label']) !!}
                 <div class="col-md-9">
-                    {!! Form::select('id_estado',$estados_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
+                    {!! Form::select('id_estado_equipo',$estados_options, null, ['class'=>'form-control input-sm miselect','required'=>'true']) !!}
                 </div>
             </div>
             <div class="form-group">

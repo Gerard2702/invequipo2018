@@ -4,7 +4,7 @@
 @section('equipments-ul','nav-sub--open')
 @section('content-title')
     Equipos
-    <a href="{{route('inventario-generate')}}" class="btn btn-warning">Generar Reporte de Inventario</a>
+    <a href="#" class="btn btn-warning">Generar Reporte de Inventario</a>
 @endsection
 @section('content')
     <div class="table-responsive">
@@ -28,9 +28,9 @@
                     <td>{{$equipment->centro_costo}}</td>
                     <td>{{$equipment->usuario}}</td>
                     <td class="with-btn text-center">
-                        {!! Form::open(['route'=>['equipments.destroy',$equipment->id],'method'=>'DELETE']) !!}
-                        <a href="{{route('equipments.show',$equipment->id)}}" class="btn btn-sm btn-info">Ver</a>
-                        {!! Form::submit('Eliminar',['class'=>'btn btn-sm btn-danger']) !!}
+                        {!! Form::open(['route'=>['equipments.destroy',$equipment->id],'method'=>'DELETE','id'=>"frmeliminar$equipment->id"]) !!}
+                        <a href="{{route('equipments.show',$equipment->id)}}" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-sm btn-danger eliminar" data-equipment="{{$equipment->id}}" data-content="{{$equipment->numero_inventario}}"><i class="fa fa-times"></i></a>
                         {!! Form::close() !!}
                     </td>
                 </tr>
@@ -56,6 +56,22 @@
                 },
                 "search": "Buscar: "
             }
+        });
+
+        @if(session('success'))
+        toastr.success('{{session('success')}}',{timeOut: 3000});
+        @endif
+
+        $(document).ready(function () {
+            $('#data-table-select').on("click",".eliminar",function () {
+                let key = $(this).data('equipment');
+                let numero_inventario = $(this).data('content');
+                bootbox.confirm("Desea Eliminar el equipo "+numero_inventario+"?", function(result){
+                    if(result){
+                        $('#frmeliminar'+key).submit();
+                    }
+                });
+            });
         });
 
     </script>

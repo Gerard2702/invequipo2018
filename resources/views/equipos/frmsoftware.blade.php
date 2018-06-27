@@ -16,9 +16,9 @@
 </div>
 <div class="form-group">
     <label>Sistemas Institucionales</label>
-    {!! Form::text('sistemas_institucionales',null,['class'=>'form-control input-sm','placeholder'=>'Sistemas Institucionales']) !!}
+    {!! Form::textarea('sistemas_institucionales', null, ['class' => 'form-control','size' => '30x4','placeholder'=>'Sistemas Institucionales']) !!}
 </div>
 <div class="form-group">
     <label>Otro Software</label>
-    {!! Form::text('otro_software',null,['class'=>'form-control input-sm','placeholder'=>'Otro Software']) !!}
+    {!! Form::textarea('otro_software', null, ['class' => 'form-control','size' => '30x4','placeholder'=>'Otro Software']) !!}
 </div>

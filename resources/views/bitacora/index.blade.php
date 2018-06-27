@@ -36,8 +36,8 @@
                             <td>{{$bitacora->servicio}}</td>
                             <td>
                                 {!! Form::open(['route'=>['bitacora.destroy',$bitacora->id],'method'=>'DELETE','id'=>"frmeliminar$bitacora->id"]) !!}
-                                <a href="#" class="btn btn-sm btn-success ver" data-content="{{$bitacora->id}}">Ver o Editar</a>
-                                <a href="#" class="btn btn-sm btn-danger eliminar" data-department="{{$bitacora->id}}" data-content="{{$bitacora->numero_inventario}}">Eliminar</a>
+                                <a href="#" class="btn btn-sm btn-primary ver" data-content="{{$bitacora->id}}"><i class="fa fa-eye"></i></a>
+                                <a href="#" class="btn btn-sm btn-danger eliminar" data-department="{{$bitacora->id}}" data-content="{{$bitacora->numero_inventario}}"><i class="fa fa-times"></i></a>
                                 {!! Form::close() !!}
                             </td>
                         </tr>

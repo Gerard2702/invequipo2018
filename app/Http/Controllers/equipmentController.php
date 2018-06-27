@@ -24,9 +24,9 @@ class equipmentController extends Controller
     public function index()
     {
         $equipments = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
-            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
-            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
-            ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->leftjoin('nivels', 'equipment.id_nivel', '=', 'nivels.id')
+            ->leftjoin('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->leftjoin('departments', 'miusers.id_department', '=', 'departments.id')
             ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario')
             ->get();
         return view('equipos.index',compact('equipments'));
@@ -88,16 +88,16 @@ class equipmentController extends Controller
     public function store(Request $request)
     {
         $equipment = new Equipment();
-        $equipment->id_tipo_equipo=$request->input('tipo_equipo');
-        $equipment->id_nivel=$request->input('nivel');
-        $equipment->id_centro_costo=$request->input('centro_costo');
+        $equipment->id_tipo_equipo=$request->input('id_tipo_equipo');
+        $equipment->id_nivel=$request->input('id_nivel');
+        $equipment->id_centro_costo=$request->input('id_centro_costo');
         $equipment->ubicacion=$request->input('ubicacion');
-        $equipment->id_usuario=$request->input('usuario');
-        $equipment->numero_inventario=$request->input('inventario');
-        $equipment->id_marca=$request->input('marca');
+        $equipment->id_usuario=$request->input('id_usuario');
+        $equipment->numero_inventario=$request->input('numero_inventario');
+        $equipment->id_marca=$request->input('id_marca');
         $equipment->modelo=$request->input('modelo');
         $equipment->serie=$request->input('serie');
-        $equipment->id_estado_equipo=$request->input('estado');
+        $equipment->id_estado_equipo=$request->input('id_estado');
         $equipment->fecha_adquisicion=$request->input('fecha_adquisicion');
         $equipment->fecha_vencimiento=$request->input('fecha_vencimiento');
         $equipment->observaciones = $request->input('observaciones');
@@ -118,15 +118,14 @@ class equipmentController extends Controller
     {
 
         $equipment = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
-            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
-            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
-            ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
-            ->join('marcas', 'equipment.id_marca', '=', 'marcas.id')
-            ->join('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
+            ->leftjoin('nivels', 'equipment.id_nivel', '=', 'nivels.id')
+            ->leftjoin('miusers', 'equipment.id_usuario', '=', 'miusers.id')
+            ->leftjoin('departments', 'miusers.id_department', '=', 'departments.id')
+            ->leftjoin('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
             ->leftjoin('perifericos', 'equipment.id_cd', '=', 'perifericos.id')
             ->leftjoin('direccions', 'equipment.id_direccionip', '=', 'direccions.id')
             ->leftjoin('domains', 'equipment.id_dominio', '=', 'domains.id')
-            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','perifericos.nombre as cd','direccions.nombre as direccionip','domains.nombre as dominio','marcas.nombre as marca','estates.nombre as estado')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','perifericos.nombre as cd','direccions.nombre as direccionip','domains.nombre as dominio','equipment.id_marca as marca','estates.nombre as estado')
             ->where('equipment.id','=',$id)
             ->get();
         return view('equipos.info',compact('equipment'));
@@ -140,7 +139,40 @@ class equipmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $equipment = Equipment::find($id);
+        $tipo_equipos = Equipmentype::all();
+        $tipo_equipo_options = [];
+        $tipo_equipo_options['']='';
+        foreach($tipo_equipos as $tipo_equipo){
+            $tipo_equipo_options[$tipo_equipo->id] = $tipo_equipo->nombre;
+        }
+        $departments = Department::all();
+        $departments_options = [];
+        $departments_options['']='';
+        foreach ($departments as $department){
+            $departments_options[$department->id]=$department->centro_costo;
+        }
+        $nivels = Nivel::all()->sortBy('nombre');;
+        $nivels_options = [];
+        $nivels_options['']='';
+        foreach ($nivels as $nivels_option){
+            $nivels_options[$nivels_option->id]=$nivels_option->nombre;
+        }
+        $usuarios = Miuser::all();
+        $usuarios_options = [];
+        $usuarios_options['']='';
+        foreach ($usuarios as $usuario){
+            $usuarios_options[$usuario->id]=$usuario->nombre;
+        }
+
+        $estados = Estate::all();
+        $estados_options = [];
+        $estados_options['']='';
+        foreach ($estados as $estado){
+            $estados_options[$estado->id]=$estado->nombre;
+        }
+        return view('equipos.edit',compact('equipment','tipo_equipo_options','departments_options','nivels_options','usuarios_options','estados_options'));
+
     }
 
     /**
@@ -150,9 +182,14 @@ class equipmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Equipment $equipment)
     {
-        //
+        $equipment->fill($request->all());
+        if(!$equipment->save()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect()->route('equipments.show',$equipment->id)->with('success', 'Equipo Actualizado!');
+        }
     }
 
     /**
@@ -161,9 +198,13 @@ class equipmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Equipment $equipment)
     {
-        //
+        if(!$equipment->delete()){
+            App::abort(500, 'Error');
+        }else{
+            return redirect()->route('equipments.index')->with('success', 'Equipo Eliminado!');
+        }
     }
 
     public function addcaracteristicas($id){

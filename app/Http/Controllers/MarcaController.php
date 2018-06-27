@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Marca;
 use Illuminate\Http\Request;
 
 class MarcaController extends Controller
@@ -13,7 +14,7 @@ class MarcaController extends Controller
      */
     public function index()
     {
-      $marcas = Marca::all();
+        $marcas = Marca::all();
         return view('marca.index',compact('marca'));  //
     }
 

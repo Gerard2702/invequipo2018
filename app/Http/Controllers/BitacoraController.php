@@ -109,12 +109,11 @@ class BitacoraController extends Controller
     public function edit(Bitacora $bitacora)
     {
         $equipment = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
-            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
-            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
+            ->leftjoin('nivels', 'equipment.id_nivel', '=', 'nivels.id')
             ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
-            ->join('marcas', 'equipment.id_marca', '=', 'marcas.id')
+            ->join('departments', 'miusers.id_department', '=', 'departments.id')
             ->join('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
-            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','marcas.nombre as marca','estates.nombre as estado')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','equipment.id_marca as marca','estates.nombre as estado')
             ->where('equipment.id','=',$bitacora->id_equipo)
             ->get();
 
@@ -123,6 +122,7 @@ class BitacoraController extends Controller
         foreach ($servicios as $servicio){
             $servicios_options[$servicio->id]=$servicio->nombre;
         }
+
         return view('bitacora.edit',compact('bitacora','equipment','servicios_options'));
     }
 
@@ -161,12 +161,11 @@ class BitacoraController extends Controller
 
     public function cargar($id){
         $equipment = Equipment::join('equipmentypes', 'equipment.id_tipo_equipo', '=', 'equipmentypes.id')
-            ->join('nivels', 'equipment.id_nivel', '=', 'nivels.id')
-            ->join('departments', 'equipment.id_centro_costo', '=', 'departments.id')
+            ->leftjoin('nivels', 'equipment.id_nivel', '=', 'nivels.id')
             ->join('miusers', 'equipment.id_usuario', '=', 'miusers.id')
-            ->join('marcas', 'equipment.id_marca', '=', 'marcas.id')
+            ->join('departments', 'miusers.id_department', '=', 'departments.id')
             ->join('estates', 'equipment.id_estado_equipo', '=', 'estates.id')
-            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','marcas.nombre as marca','estates.nombre as estado')
+            ->select('equipment.*', 'equipmentypes.nombre as tipo_equipo','nivels.nombre as nivel','departments.centro_costo as centro_costo','miusers.nombre as usuario','equipment.id_marca as marca','estates.nombre as estado')
             ->where('equipment.id','=',$id)
             ->get();
 
@@ -202,9 +201,9 @@ class BitacoraController extends Controller
             ->join('services','bitacoras.id_tipo_servicio','=','services.id')
             ->join('equipmentypes','equipment.id_tipo_equipo','=','equipmentypes.id')
             ->join('miusers','equipment.id_usuario','=','miusers.id')
-            ->join('departments','equipment.id_centro_costo','=','departments.id')
+            ->join('departments','miusers.id_department','=','departments.id')
             ->select('bitacoras.*','equipment.numero_inventario as numero_inventario','services.nombre as servicio','equipmentypes.nombre as tipo_equipo','equipment.ubicacion as ubicacion','miusers.nombre as usuario','miusers.telefono as telefono','departments.centro_costo')
-            ->where('bitacoras.fecha','=',$fecha)
+            ->where('bitacoras.fecha','=',$fecha)->orderBy('equipment.numero_inventario', 'asc')
             ->get();
 
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
