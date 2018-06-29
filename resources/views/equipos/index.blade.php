@@ -4,7 +4,7 @@
 @section('equipments-ul','nav-sub--open')
 @section('content-title')
     Equipos
-    <a href="#" class="btn btn-warning">Generar Reporte de Inventario</a>
+    <a href="{{route('inventario-generate')}}" class="btn btn-warning">Generar Reporte de Inventario</a>
 @endsection
 @section('content')
     <div class="table-responsive">

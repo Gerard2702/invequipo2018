@@ -13,6 +13,8 @@ use App\Miuser;
 use App\Nivel;
 use App\Periferico;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PHPExcel_Style_Alignment;
 
 class equipmentController extends Controller
 {
@@ -286,5 +288,118 @@ class equipmentController extends Controller
         }else{
             return redirect()->route('equipments.show',$id)->with('success', 'Identificacion de Red Agregada!');
         }
+    }
+
+    public function generate(){
+        $now = new \DateTime();
+        $fecha = $now->format('Y-m-d');
+
+        Excel::create('InventarioInformatico-'.$fecha, function($excel) use($fecha) {
+
+            $excel->sheet('Inventario', function($sheet) use ($fecha) {
+                //HEADER
+                $titulos = array(
+                    'family'     => 'Arial',
+                    'size'       => '20',
+                    'bold'       => true
+                );
+
+                $tableheader = array(
+                    'family'     => 'Arial',
+                    'size'       => '12',
+                    'bold'       => true
+                );
+
+                $centerText = array(
+                    'alignment' => array(
+                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                    )
+                );
+
+
+                $sheet->mergeCells('A1:Z1');
+                $sheet->row(1,['   INSTITUTO  SALVADOREÑO  DEL  SEGURO  SOCIAL']);
+                $sheet->row(1, function($row) use ($titulos) { $row->setFont($titulos); });
+                $sheet->mergeCells('A2:Z2');
+                $sheet->row(2,['   INFORMÁTICA, CONSULTORIO  DE  ESPECIALIDADES']);
+                $sheet->row(2, function($row) use ($titulos) { $row->setFont($titulos); });
+                $sheet->mergeCells('A3:Z3');
+                $sheet->row(3,['   INVENTARIO  DE  EQUIPO  INFORMÁTICO,'.$fecha]);
+                $sheet->row(3, function($row) use ($titulos) { $row->setFont($titulos); });
+
+                $sheet->row(4, function($row) use ($tableheader) {
+                    $row->setBackground('#000000');
+                    $row->setFontColor('#FFFFFF');
+                    $row->setFont($tableheader);
+                });
+                $sheet->mergeCells('A4:I4');
+                $sheet->getStyle("A4:I4")->applyFromArray($centerText);
+                $sheet->mergeCells('J4:N4');
+                $sheet->getStyle("J4:N4")->applyFromArray($centerText);
+                $sheet->mergeCells('O4:T4');
+                $sheet->getStyle("O4:T4")->applyFromArray($centerText);
+                $sheet->mergeCells('U4:W4');
+                $sheet->getStyle("U4:W4")->applyFromArray($centerText);
+                $sheet->mergeCells('X4:Z4');
+                $sheet->getStyle("X4:Z4")->applyFromArray($centerText);
+                $sheet->row(4,['DATOS GENERALES','CARACTERISTICAS','SOFTWARE','IDENTIFICACION DE RED','ESTADO DEL EQUIPO']);
+                $sheet->getStyle("A5:Z5")->applyFromArray($centerText);
+                $sheet->row(5, function($row) { $row->setBackground('#CCCCCC'); });
+                $sheet->row(5,['Correlativo','Tipo de Equipo','Ubicacion','Nombre de Usuario','Centro de Costo','Numero de Inventario','Marca','Modelo','Serie','Marca & Modelo','Veloc.','RAM','HDD','CD/DVD','Sistema Operativo','Licencia S.O.','Version de Office','Licencia de Office','Sistemas Institucionales','Otros Software (Utilitarios)','Nombre del Equipo','Direccion IP','Nombre del Dominio','Fecha de Adquisicion','Fecha de Vencimiento de Garantia','Estado del Equipo','Observaciones']);
+
+                $equipmets = Equipment::join('miusers','equipment.id_usuario','=','miusers.id')
+                    ->join('departments','miusers.id_department','=','departments.id')
+                    ->join('equipmentypes','equipment.id_tipo_equipo','=','equipmentypes.id')
+                    ->leftjoin('direccions','equipment.id_direccionip','=','direccions.id')
+                    ->leftjoin('domains','equipment.id_dominio','=','domains.id')
+                    ->join('estates','equipment.id_estado_equipo','=','estates.id')
+                    ->select('equipment.*','miusers.nombre as usuario','departments.centro_costo as centro_costo','equipmentypes.nombre as tipo_equipo','direccions.nombre as direccion','domains.nombre as dominio','estates.nombre as estado_equipo')->orderBy('equipment.ubicacion','asc')
+                    ->get();
+                $num = 0;
+                $rows = 6;
+                foreach ($equipmets as $equipmet){
+                    $sheet->row($rows,[
+                        $num,
+                        $equipmet->tipo_equipo,
+                        $equipmet->ubicacion,
+                        $equipmet->usuario,
+                        $equipmet->centro_costo,
+                        $equipmet->numero_inventario,
+                        $equipmet->id_marca,
+                        $equipmet->modelo,
+                        $equipmet->serie,
+                        $equipmet->marca_modelo,
+                        $equipmet->velocidad,
+                        $equipmet->ram,
+                        $equipmet->hdd,
+                        '',
+                        $equipmet->sistema_operativo,
+                        $equipmet->licencia_sistema,
+                        $equipmet->office,
+                        $equipmet->licencia_office,
+                        $equipmet->sistemas_institucionales,
+                        $equipmet->otro_software,
+                        $equipmet->nombre_equipo,
+                        $equipmet->direccion,
+                        $equipmet->dominio,
+                        $equipmet->fecha_adquisicion,
+                        $equipmet->fecha_vencimiento,
+                        $equipmet->estado_equipo,
+                        $equipmet->observaciones,
+                        ]);
+                    $letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+                    foreach ($letters as $letter){
+                        $sheet->cell("$letter$rows", function($cell){
+                            $cell->setBorder('thin','thin','thin','thin');
+                        });
+                    }
+                    $sheet->getStyle("A$rows:Z$rows")->applyFromArray($centerText);
+                    $sheet->getStyle("A$rows:Z$rows")->getAlignment()->setWrapText(true);
+                    $num++;
+                    $rows++;
+                }
+
+            });
+        })->export('xls');
     }
 }
