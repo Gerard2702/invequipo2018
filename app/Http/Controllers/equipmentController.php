@@ -15,6 +15,7 @@ use App\Periferico;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPExcel_Style_Alignment;
+use PHPExcel_Worksheet_Drawing;
 
 class equipmentController extends Controller
 {
@@ -303,7 +304,6 @@ class equipmentController extends Controller
                     'size'       => '20',
                     'bold'       => true
                 );
-
                 $tableheader = array(
                     'family'     => 'Arial',
                     'size'       => '12',
@@ -316,15 +316,51 @@ class equipmentController extends Controller
                     )
                 );
 
+                $sheet->cells('A5:Z5', function($cells) {
+                    $cells->setBorder('thin','thin','thin','thin');
+                    $cells->setAlignment('center');
+                    $cells->setValignment('center');
+                });
+                $sheet->getStyle("A5:Z5")->getAlignment()->setWrapText(true);
+
+                $sheet->setWidth(array(
+                    'A' =>  5,
+                    'B' =>  15,
+                    'C' => 20,
+                    'D' => 25,
+                    'E' => 20,
+                    'F' => 20,
+                    'G' => 20,
+                    'H' => 20,
+                    'I' => 20,
+                    'J' => 20,
+                    'K' => 20,
+                    'L' => 20,
+                    'M' => 20,
+                    'N' => 20,
+                    'O' => 20,
+                    'P' => 20,
+                    'Q' => 20,
+                    'R' => 20,
+                    'S' => 30,
+                    'T' => 30,
+                    'U' => 20,
+                    'V' => 20,
+                    'W' => 20,
+                    'X' => 20,
+                    'Y' => 20,
+                    'Z' => 20,
+                    'AA' => 40
+                ));
 
                 $sheet->mergeCells('A1:Z1');
-                $sheet->row(1,['   INSTITUTO  SALVADOREÑO  DEL  SEGURO  SOCIAL']);
+                $sheet->row(1,['                   INSTITUTO  SALVADOREÑO  DEL  SEGURO  SOCIAL']);
                 $sheet->row(1, function($row) use ($titulos) { $row->setFont($titulos); });
                 $sheet->mergeCells('A2:Z2');
-                $sheet->row(2,['   INFORMÁTICA, CONSULTORIO  DE  ESPECIALIDADES']);
+                $sheet->row(2,['                   INFORMÁTICA, CONSULTORIO  DE  ESPECIALIDADES']);
                 $sheet->row(2, function($row) use ($titulos) { $row->setFont($titulos); });
                 $sheet->mergeCells('A3:Z3');
-                $sheet->row(3,['   INVENTARIO  DE  EQUIPO  INFORMÁTICO,'.$fecha]);
+                $sheet->row(3,['                   INVENTARIO  DE  EQUIPO  INFORMÁTICO,'.$fecha]);
                 $sheet->row(3, function($row) use ($titulos) { $row->setFont($titulos); });
 
                 $sheet->row(4, function($row) use ($tableheader) {
@@ -342,7 +378,7 @@ class equipmentController extends Controller
                 $sheet->getStyle("U4:W4")->applyFromArray($centerText);
                 $sheet->mergeCells('X4:Z4');
                 $sheet->getStyle("X4:Z4")->applyFromArray($centerText);
-                $sheet->row(4,['DATOS GENERALES','CARACTERISTICAS','SOFTWARE','IDENTIFICACION DE RED','ESTADO DEL EQUIPO']);
+                $sheet->row(4,array('DATOS GENERALES','','','','','','','','','CARACTERISTICAS','','','','','SOFTWARE','','','','','','IDENTIFICACION DE RED','','','ESTADO DEL EQUIPO'));
                 $sheet->getStyle("A5:Z5")->applyFromArray($centerText);
                 $sheet->row(5, function($row) { $row->setBackground('#CCCCCC'); });
                 $sheet->row(5,['Correlativo','Tipo de Equipo','Ubicacion','Nombre de Usuario','Centro de Costo','Numero de Inventario','Marca','Modelo','Serie','Marca & Modelo','Veloc.','RAM','HDD','CD/DVD','Sistema Operativo','Licencia S.O.','Version de Office','Licencia de Office','Sistemas Institucionales','Otros Software (Utilitarios)','Nombre del Equipo','Direccion IP','Nombre del Dominio','Fecha de Adquisicion','Fecha de Vencimiento de Garantia','Estado del Equipo','Observaciones']);
@@ -391,15 +427,26 @@ class equipmentController extends Controller
                     foreach ($letters as $letter){
                         $sheet->cell("$letter$rows", function($cell){
                             $cell->setBorder('thin','thin','thin','thin');
+                            $cell->setValignment('center');
+                            $cell->setAlignment('center');
                         });
                     }
-                    $sheet->getStyle("A$rows:Z$rows")->applyFromArray($centerText);
                     $sheet->getStyle("A$rows:Z$rows")->getAlignment()->setWrapText(true);
+                    $sheet->getStyle("AA$rows")->getAlignment()->setWrapText(true);
                     $num++;
                     $rows++;
                 }
+                $row = $rows-1;
+                $sheet->cells("AA1:AA$row", function($cells) {
+                    $cells->setAlignment('center');
+                    $cells->setValignment('center');
+                });
 
             });
         })->export('xls');
+    }
+
+    public function generateExcel(){
+        return view('generarexcel');
     }
 }

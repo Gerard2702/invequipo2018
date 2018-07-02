@@ -35,6 +35,8 @@ Route::post('/equipment/store/red/{id}','equipmentController@storeRed')->name('r
 
 Route::get('/equipment/generate/','equipmentController@generate')->name('inventario-generate');
 
+Route::get('/equipment/generateExcel/','equipmentController@generateExcel')->name('generate-excel');
+
 Route::resource('departments','DepartmentController');
 
 Route::resource('admins','AdminController');
